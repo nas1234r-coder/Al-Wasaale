@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قراءة تعليمية دقيقة: عائلة ليلى</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@700&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- المتغيرات اللونية (ألوان مبهجة للأطفال) --- */
+        :root {
+            --primary-color: #ff006e; /* فوشيا جذاب للزر الأساسي */
+            --secondary-color: #4CAF50; /* أخضر جميل للتشغيل */
+            --accent-color: #ff9800; /* برتقالي دافئ للحدود */
+            --repeat-color: #7c4dff; /* بنفسجي لزر التكرار */
+            --record-color: #e74c3c; /* أحمر للتسجيل */
+            --bright-red: #e63946; /* لون الخط الأحمر المبرز */
+            --bg-gradient-start: #e0f7fa; /* بداية التدرج الخلفي (أزرق فاتح) */
+            --bg-gradient-end: #ffffff;   /* نهاية التدرج الخلفي (أبيض) */
+        }
+
+        /* --- الإعدادات العامة للصفحة --- */
+        body {
+            margin: 0;
+            padding: 0;
+            direction: rtl; /* اتجاه النص من اليمين لليسار */
+            text-align: center;
+            font-family: 'Noto Naskh Arabic', serif; /* الخط الأساسي للنص القرائي */
+            font-weight: 700; /* تطبيق خط بولد عريض على كامل الصفحة */
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden; /* منع التمرير الأفقي */
+        }
+
+        /* --- حاوية المحتوى الرئيسية --- */
+        .content-wrapper {
+            flex: 1; /* تأخذ المساحة المتاحة فوق شريط التحكم */
+            width: 95%;
+            max-width: 1100px; /* عرض أقصى لراحة العين على الكمبيوتر */
+            margin: 0 auto;
+            padding: 20px 10px 150px 10px; /* حشوة سفلية كافية لشريط التحكم */
+            position: relative; /* ضروري لتموضع يد الإشارة */
+        }
+
+        /* --- تصميم حاويات السطور (العنوان والفقرات) --- */
+        .line-box, .title-container {
+            display: flex;
+            align-items: center; /* محاذاة العناصر عمودياً */
+            gap: 15px; /* مسافة بين الأزرار والنص */
+            background: rgba(255, 255, 255, 0.9); /* خلفية بيضاء نصف شفافة */
+            padding: 20px;
+            border-radius: 30px; /* حواف دائرية محببة للأطفال */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* ظل ناعم */
+            border: 4px dashed var(--accent-color); /* حدود منقطة برتقالية */
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1; /* تحت يد الإشارة */
+        }
+
+        /* تعديلات خاصة بحاوية العنوان لتكون في المنتصف */
+        .title-container {
+            border-color: var(--primary-color); /* لون حدود مختلف للعنوان */
+            justify-content: center; /* توسيط المحتوى أفقياً (الأزرار والنص) */
+        }
+
+        /* --- حاوية النص القرائي --- */
+        .text-container {
+            font-size: clamp(28px, 5.5vw, 48px); /* حجم خط مرن للموبايل والكمبيوتر */
+            line-height: 2; /* مسافة بين الأسطر لسهولة القراءة */
+            color: #2c3e50;
+            flex: 1; /* تأخذ باقي المساحة في السطر */
+            text-align: right; /* محاذاة النص لليمين داخل حاويته */
+            position: relative;
+            font-weight: 700; /* التأكيد على جعل النص عريضاً هنا أيضاً */
+        }
+
+        /* توسيط نص العنوان */
+        .title-container .text-container {
+            text-align: center; /* توسيط النص نفسه داخل حاويته */
+            flex: 0 1 auto; /* لا تتمدد، تأخذ مساحة محتواها فقط */
+        }
+
+        /* --- تصميم أزرار التحكم في السطر --- */
+        .line-controls {
+            display: flex;
+            flex-direction: column; /* الأزرار عمودية بجانب النص */
+            gap: 8px;
+            flex-shrink: 0; /* منع تقلص حجم الأزرار */
+            z-index: 2; /* فوق الحدود المنقطة */
+        }
+
+        /* تنسيق خاص للأزرار في العنوان لتدفق أفقي إذا لزم الأمر */
+        .title-container .line-controls {
+            flex-direction: row; /* الأزرار أفقية في العنوان */
+            margin-left: 20px; /* مسافة بين الأزرار والنص */
+        }
+
+        /* زر دائري عام */
+        .btn-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .line-play-btn { background: var(--primary-color); }
+        .record-btn { background: #7f8c8d; } /* لون رمادي عند عدم التسجيل */
+        .record-btn.recording { background: var(--record-color); animation: pulse 1.5s infinite; }
+        .student-play-btn { background: var(--secondary-color); display: none; } /* مخفي حتى يتم التسجيل */
+
+        /* زر تبديل التكرار */
+        .repeat-toggle {
+            background: var(--repeat-color);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 32px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+        }
+        
+        /* --- تنسيق الكلمات الفردية --- */
+        .word { 
+            display: inline-block; 
+            margin: 0 6px; 
+            padding: 2px 12px; 
+            border-radius: 12px; 
+            transition: all 0.2s ease; 
+            position: relative;
+        }
+        
+        /* تأثير الكلمة النشطة (التي تقرأ حالياً) */
+        .word.active { 
+            background-color: rgba(255, 152, 0, 0.06) !important; /* خلفية برتقالية خفيفة جداً */
+            color: var(--bright-red) !important; /* لون الخط أحمر مبهج */
+            transform: scale(1.1); /* تكبير بسيط */
+            font-weight: 700; 
+            border-bottom: none !important; 
+            text-shadow: none !important;
+            z-index: 3; /* فوق الكلمات الأخرى */
+        }
+
+        /* --- تصميم يد الإشارة (الإيموجي) --- */
+        .pointer-hand {
+            position: fixed; /* تموضع ثابت بالنسبة للشاشة */
+            font-size: 45px; /* حجم الإيموجي */
+            line-height: 1;
+            pointer-events: none; /* لا تتداخل مع النقر على العناصر */
+            z-index: 1000; /* فوق كل شيء */
+            opacity: 0; /* مخفية في البداية */
+            /* حركة ناعمة عند تغيير الموضع والظهور */
+            transition: opacity 0.2s ease, left 0.15s ease-out, top 0.15s ease-out;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* --- شريط التحكم السفلي الثابت --- */
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 100;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
+        }
+
+        /* أزرار التشغيل الرئيسية */
+        button.main-btn {
+            font-family: 'Cairo', sans-serif;
+            font-size: 18px;
+            font-weight: bold; 
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+        }
+        .playBtn { background-color: var(--secondary-color); }
+        .pauseBtn { background-color: var(--accent-color); }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper" id="main-content"></div>
+
+<div class="controls">
+    <button class="main-btn pauseBtn" onclick="pauseReading()">⏸ إيقاف</button>
+    <button class="main-btn playBtn" onclick="startReading()">▶ قراءة كاملة</button>
+</div>
+
+<audio id="audio"><source src="audio.mp3" type="audio/mpeg"></audio>
+
+<script>
+    // بيانات النص وتوقيت الكلمات (بالثواني)
+    const linesData = [
+        { text: "عَائِلَةُ لَيْلَى", start: 10.10, end: 14.7, isTitle: true },
+        { text: "خَلِيلٌ عُمْرُهُ سِتُّ سَنَواتٍ. أُخْتُهُ لَيْلَى، عُمْرُها ثَلاثُ سَنَواتٍ، أَمَّا عَلِيٌّ فَمَازالَ في عامِهِ الْأَوَّلِ.", start: 14.9, end: 44.0, isTitle: false },
+        { text: "ذاتَ لَيْلَةٍ، قَالَ خَلِيلٌ: يَا لَيْلَى، تَعَالَيْ نَلْعَبْ قَلِيلًا مَعَ عَلِيٍّ، لِيَتَوَقَّفَ عَنِ الْبُكَاءِ.", start: 44.9, end: 64.0, isTitle: false },
+        { text: "قَالَتْ لَيْلَى مُنْزَعِجَةً: هُوَ لَا يَعْرِفُ شَيْئًا إِلَّا الْبُكاءَ.", start: 64.9, end: 78.0, isTitle: false }
+    ];
+
+    // توقيت بداية كل كلمة على حدة
+    const wordTimings = [
+        10.20, 15.0, 17, 19.0, 20, 23, 25, 27, 29, 32, 34, 36, 38, 39, 40, 41, 
+        45, 46, 48, 49, 51, 51.5, 53, 55, 56, 57, 58, 60, 62, 63, 65, 66, 67, 68, 69, 70, 71, 73, 74
+    ];
+
+    const mainContent = document.getElementById("main-content");
+    const audio = document.getElementById("audio");
+    let wordCounter = 0;
+    let stopTime = 999;
+    let isSingleLineMode = false;
+    let currentRepeatCount = 1;
+    let maxRepeat = 1;
+    let currentLineStart = 0;
+    let interval;
+    let mediaRecorder;
+    let audioChunks = [];
+    let pointerHand; // متغير لتخزين عنصر يد الإشارة
+
+    // بناء واجهة المستخدم ديناميكياً
+    function buildUI() {
+        mainContent.innerHTML = "";
+        
+        // إنشاء عنصر يد الإشارة مرة واحدة وإضافته للحاوية الرئيسية
+        pointerHand = document.createElement("div");
+        pointerHand.className = "pointer-hand";
+        pointerHand.innerHTML = "👆"; // الإيموجي المستخدم
+        mainContent.appendChild(pointerHand);
+        
+        linesData.forEach((line) => {
+            // إنشاء حاوية السطر
+            const container = document.createElement("div");
+            container.className = line.isTitle ? "title-container" : "line-box";
+            
+            // منطقة الأزرار
+            const controlsDiv = document.createElement("div");
+            controlsDiv.className = "line-controls";
+            
+            // 1. زر تشغيل السطر
+            const playBtn = document.createElement("button");
+            playBtn.className = "btn-circle line-play-btn";
+            playBtn.innerHTML = "🔊";
+            playBtn.onclick = () => {
+                maxRepeat = parseInt(repeatBtn.dataset.repeat);
+                currentRepeatCount = 1;
+                currentLineStart = line.start;
+                playSingleLine(line.start, line.end);
+            };
+
+            // 2. زر تبديل التكرار (1 أو 2)
+            const repeatBtn = document.createElement("button");
+            repeatBtn.className = "repeat-toggle";
+            repeatBtn.innerText = "1";
+            repeatBtn.dataset.repeat = "1";
+            repeatBtn.onclick = () => {
+                let val = repeatBtn.innerText === "1" ? "2" : "1";
+                repeatBtn.innerText = val;
+                repeatBtn.dataset.repeat = val;
+            };
+
+            // 3. زر تسجيل الطالب
+            const recordBtn = document.createElement("button");
+            recordBtn.className = "btn-circle record-btn";
+            recordBtn.innerHTML = "🎤";
+            
+            // 4. زر سماع تسجيل الطالب
+            const studentPlayBtn = document.createElement("button");
+            studentPlayBtn.className = "btn-circle student-play-btn";
+            studentPlayBtn.innerHTML = "▶";
+
+            let studentAudioUrl; // لتخزين رابط الصوت المسجل لهذا السطر
+
+            // وظيفة التسجيل
+            recordBtn.onclick = async () => {
+                if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+                        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            studentAudioUrl = URL.createObjectURL(audioBlob);
+                            studentPlayBtn.style.display = "flex"; // إظهار زر التشغيل
+                        };
+                        mediaRecorder.start();
+                        recordBtn.classList.add("recording");
+                        recordBtn.innerHTML = "⏹"; // تغيير الأيقونة لإيقاف
+                    } catch (err) {
+                        alert("يرجى السماح بالوصول للميكروفون");
+                    }
+                } else {
+                    mediaRecorder.stop();
+                    recordBtn.classList.remove("recording");
+                    recordBtn.innerHTML = "🎤";
+                }
+            };
+
+            studentPlayBtn.onclick = () => {
+                if (studentAudioUrl) {
+                    const playAudio = new Audio(studentAudioUrl);
+                    playAudio.play();
+                }
+            };
+
+            // حاوية النص
+            const textDiv = document.createElement("div");
+            textDiv.className = "text-container";
+
+            if (line.isTitle) {
+                // العنوان ككلمة واحدة ضخمة
+                const span = document.createElement("span");
+                span.innerText = line.text;
+                span.className = "word title-word";
+                span.id = "w" + wordCounter++;
+                textDiv.appendChild(span);
+            } else {
+                // تقسيم الفقرة إلى كلمات
+                const words = line.text.split(/\s+/).filter(w => w.trim().length > 0);
+                words.forEach(word => {
+                    const wordSpan = document.createElement("span");
+                    wordSpan.className = "word";
+                    wordSpan.id = "w" + wordCounter++;
+                    wordSpan.innerText = word;
+                    textDiv.appendChild(wordSpan);
+                });
+            }
+
+            // تجميع العناصر
+            controlsDiv.appendChild(playBtn);
+            controlsDiv.appendChild(repeatBtn);
+            controlsDiv.appendChild(recordBtn);
+            controlsDiv.appendChild(studentPlayBtn);
+            container.appendChild(controlsDiv); // الأزرار على اليمين
+            container.appendChild(textDiv);     // النص بجوارها
+            mainContent.appendChild(container);
+        });
+    }
+
+    // وظيفة لتحريك يد الإشارة أسفل الكلمة الحالية
+    function movePointerToWord(wordElement) {
+        if (!wordElement || !pointerHand) return;
+        
+        // الحصول على إحداثيات الكلمة بالنسبة للشاشة
+        const rect = wordElement.getBoundingClientRect();
+        
+        // حساب المنتصف الأفقي للكلمة
+        const centerX = rect.left + (rect.width / 2);
+        
+        // تحديث موضع اليد (إضافة تعديلات بسيطة لضبط التوسط والارتفاع)
+        pointerHand.style.left = `${centerX - 22}px`; // 22 هي تقريباً نصف عرض الإيموجي
+        pointerHand.style.top = `${rect.bottom + 5}px`; // أسفل الكلمة بـ 5 بكسل
+    }
+
+    // تحديث الواجهة وتلوين الكلمات بناءً على وقت الصوت
+    function updateUI() {
+        const currentTime = audio.currentTime;
+
+        // التعامل مع وضع التكرار لسطر واحد
+        if (isSingleLineMode && (currentTime >= stopTime || audio.ended)) {
+            if (currentRepeatCount < maxRepeat) {
+                currentRepeatCount++;
+                audio.pause(); audio.currentTime = currentLineStart; audio.play();
+            } else {
+                audio.pause(); clearInterval(interval);
+                if (pointerHand) pointerHand.style.opacity = "0"; // إخفاء اليد عند الانتهاء
+                document.querySelectorAll(".word").forEach(w => w.classList.remove("active"));
+            }
+            return;
+        }
+
+        const allWords = document.querySelectorAll(".word");
+        let activeIndex = -1;
+
+        // البحث عن الكلمة المناسبة للوقت الحالي
+        for (let i = 0; i < wordTimings.length; i++) {
+            if (currentTime >= wordTimings[i]) {
+                // تخطي توقيتات الكلمات خارج نطاق السطر الحالي في وضع "سطر واحد"
+                if (isSingleLineMode && wordTimings[i] < currentLineStart - 0.2) continue;
+                activeIndex = i;
+            } else { break; }
+        }
+        
+        // تلوين الكلمة النشطة وتحريك اليد إليها
+        allWords.forEach((w, index) => {
+            if (index === activeIndex) {
+                w.classList.add("active");
+                if (pointerHand) {
+                    pointerHand.style.opacity = "1"; // إظهار اليد
+                    movePointerToWord(w);
+                }
+            } else {
+                w.classList.remove("active");
+            }
+        });
+        
+        // إخفاء اليد في الفترات الصامتة قبل بداية أول كلمة
+        if (activeIndex === -1 && pointerHand) {
+            pointerHand.style.opacity = "0";
+        }
+    }
+
+    // القراءة الكاملة
+    function startReading() {
+        isSingleLineMode = false;
+        audio.play().catch(e => console.log("الصوت غير موجود"));
+        if (pointerHand) pointerHand.style.opacity = "1"; // تأكيد إظهار اليد
+        clearInterval(interval);
+        interval = setInterval(updateUI, 50); // تحديث سريع لحركة أنعم
+    }
+
+    // قراءة سطر واحد مع تكرار محتمل
+    function playSingleLine(start, end) {
+        isSingleLineMode = true;
+        stopTime = end;
+        audio.currentTime = start;
+        audio.play().catch(e => console.log("الصوت غير موجود"));
+        if (pointerHand) pointerHand.style.opacity = "1";
+        clearInterval(interval);
+        interval = setInterval(updateUI, 50);
+    }
+
+    // إيقاف مؤقت
+    function pauseReading() { 
+        audio.pause(); 
+        if (pointerHand) pointerHand.style.opacity = "0"; // إخفاء اليد عند الإيقاف
+        clearInterval(interval); 
+    }
+
+    // بدء التشغيل عند تحميل الصفحة
+    window.onload = buildUI;
+    
+    // إعادة ضبط موضع اليد عند تغيير حجم الشاشة (دوران الموبايل مثلاً)
+    window.onresize = () => {
+        const activeWord = document.querySelector(".word.active");
+        if (activeWord) movePointerToWord(activeWord);
+    };
+</script>
+</body>
+</html>
